@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.blog',
     'djoser',
     'drf_yasg',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -129,11 +130,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        'rest_framework.permissions.AllowAny',
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',   
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
