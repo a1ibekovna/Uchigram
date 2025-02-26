@@ -5,15 +5,16 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    create = models.DateTimeField(auto_now_add=True)
+    updates = models.DateTimeField(auto_now=True)
+    icon = models.ImageField(upload_to = "category_icons/")
 
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return self.name
+        return f"(self.name)"
     
 class Publication(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='publications')
@@ -21,8 +22,8 @@ class Publication(models.Model):
     content = models.TextField()
     is_archived = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='publications')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    create = models.DateTimeField(auto_now_add=True)
+    updates = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Publication"

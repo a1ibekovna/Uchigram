@@ -10,8 +10,6 @@ class CategoryFilter(filters.FilterSet):
         fields = ['name']
 
 class PublicationFilter(filters.FilterSet):
-    content = filters.CharFilter(lookup_expr='icontains')
-    user = filters.CharFilter(field_name='user__username', lookup_expr='icontains')
     category = filters.CharFilter(field_name='category__name', lookup_expr='icontains')
 
 

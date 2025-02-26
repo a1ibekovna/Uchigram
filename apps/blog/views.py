@@ -1,11 +1,13 @@
 
 from rest_framework import generics, permissions
+from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 from django_filters import rest_framework as filters
 
 from .models import Category, Publication
 from .serializers import CategorySerializer, PublicationSerializer
-from .permissions import IsOwnerorReadonly
-from .filters import CategoryFilter, PublicationFilter
+from .permissions import IsOwnerOrReadOnly
+from .filter import CategoryFilter, PublicationFilter
 
 class CategoryListCreateAPIView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -13,7 +15,7 @@ class CategoryListCreateAPIView(generics.ListCreateAPIView):
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = CategoryFilter
 
-class CategoryRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+class CategoryRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -21,11 +23,14 @@ class PublicationListCreateAPIView(generics.ListCreateAPIView):
     queryset = Publication.objects.all()
     serializer_class = PublicationSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_class = PublicationFilter
+
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class PublicationRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
+class PublicationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Publication.objects.all()
     serializer_class = PublicationSerializer
-    permission_classes = [IsOwnerorReadonly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
